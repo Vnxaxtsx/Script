@@ -1,0 +1,590 @@
+getgenv().Settings = {
+	["Auto Farm"] = {
+		["Mob Select"] = "", 
+		["Mob Farm"] = false,
+
+        ["Boss Select"] = "", 
+		["Boss Farm"] = false,
+
+		["Halloween Sword"] = false,
+		["Halloween Mob"] = false,
+
+		["Auto Click"] = false,
+
+        ["Auto Hatch Alien Egg"] = false,
+        ["Auto Hatch Magma Egg"] = false,
+
+        ["Auto Equip Best"] = false,
+		["Claim Gift"]  = false
+	},
+	["Misc"] = {
+		["WalkSpeed"] = 20, -- Default Speed
+		["Infinite  Jump"] = false,
+
+
+		["Font"] = Enum.Font.Fantasy,
+		["Color"] = Color3.fromRGB(173, 48, 48),
+		["WaterMark"] = true
+	}
+}
+
+
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+	game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+	wait(1)
+	game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+
+repeat wait() until game:IsLoaded()
+repeat wait() until game:GetService("Players")
+repeat wait() until game:GetService("Players").LocalPlayer
+repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui
+
+function comma(amount)
+	local formatted = amount
+	while true do  
+		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+		if (k==0) then
+			break
+		end
+	end
+	return formatted
+end
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vnxaxtsx/Library/main/QxLibrary"))()
+
+
+
+--[Functions Join Discord]
+
+game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
+	if child.Name == 'ErrorPrompt' and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
+		game:GetService("TeleportService"):Teleport(game.PlaceId)
+	end
+end)
+
+
+local window = library:Win()
+local TAutoFarm = window:addtap("Auto Farm")
+
+local AF1 = TAutoFarm:addpage()
+local AF2 = TAutoFarm:addpage()
+
+
+local MobTableValue 
+if getgenv().Settings["Auto Farm"]["Mob Select"] == "" then
+	MobTableValue = "Select Mobs"
+else
+	MobTableValue = getgenv().Settings["Auto Farm"]["Mob Select"]
+end
+
+AF1:Ti("Auto Farm")
+
+local MobTable = {
+	"-- Castle --",
+	"1",
+	"2",
+	"3",
+	"4",
+	"5",
+    "-- Hell --",
+	"6",
+	"7",
+	"8",
+	"9",
+	"10",
+    "-- Frozen Island --",
+	"11",
+	"12",
+	"13",
+	"14",
+	"15",
+    "-- Desert --",
+	"16",
+	"17",
+	"18",
+	"19",
+	"20",
+    "-- Office --",
+	"21",
+	"22",
+	"23",
+	"24",
+	"25"
+}
+AF1:DropDown(
+	MobTableValue,
+	MobTable,
+	function(a)
+		getgenv().Settings["Auto Farm"]["Mob Select"]  = a
+	end
+)
+
+AF1:Toggle(
+	"Mob Farm",
+	getgenv().Settings["Auto Farm"]["Mob Farm"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Mob Farm"] = a
+	end
+)
+
+local BossTableValue 
+if getgenv().Settings["Auto Farm"]["Boss Select"] == "" then
+	BossTableValue = "Select Mobs"
+else
+	BossTableValue = getgenv().Settings["Auto Farm"]["Boss Select"]
+end
+
+local BossTable = {
+	"Boss-1",
+	"Boss-2",
+	"Boss-3",
+    "Boss1",
+    "Boss2",
+    "Boss3",
+    "Boss4",
+    "Boss5"
+}
+AF1:DropDown(
+	BossTableValue,
+	BossTable,
+	function(a)
+		getgenv().Settings["Auto Farm"]["Boss Select"]  = a
+	end
+)
+
+AF1:Toggle(
+	"Boss Farm",
+	getgenv().Settings["Auto Farm"]["Boss Farm"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Boss Farm"] = a
+	end
+)
+AF1:Ti("Halloween Event")
+
+AF1:Toggle(
+	"Halloween Sword",
+	getgenv().Settings["Auto Farm"]["Halloween Sword"] ,
+	function(a)
+		getgenv().Settings["Auto Farm"]["Halloween Sword"]  = a
+	end
+)
+AF1:Toggle(
+	"Halloween Mob",
+	getgenv().Settings["Auto Farm"]["Halloween Mob"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Halloween Mob"] = a
+	end
+)
+AF1:Ti("Other")
+AF1:Toggle(
+	"Auto Click",
+	getgenv().Settings["Auto Farm"]["Auto Click"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Auto Click"] = a
+	end
+)
+AF1:Toggle(
+	"Auto Hatch Alien Egg",
+	getgenv().Settings["Auto Farm"]["Auto Hatch Alien Egg"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Auto Hatch Alien Egg"] = a
+	end
+)
+AF1:Toggle(
+	"Auto Hatch Magma Egg",
+	getgenv().Settings["Auto Farm"]["Auto Hatch Magma Egg"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Auto Hatch Magma Egg"] = a
+	end
+)
+AF1:Toggle(
+	"Auto Equip Best",
+	getgenv().Settings["Auto Farm"]["Auto Equip Best"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Auto Equip Best"] = a
+	end
+)
+AF1:Toggle(
+	"Claim Gift",
+	getgenv().Settings["Auto Farm"]["Claim Gift"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Claim Gift"] = a
+	end
+)
+
+function ServerHop()
+	local Player = game.Players.LocalPlayer    
+	local Http = game:GetService("HttpService")
+	local TPS = game:GetService("TeleportService")
+	local Api = "https://games.roblox.com/v1/games/"
+
+	local _place,_id = game.PlaceId, game.JobId
+	local _servers = Api.._place.."/servers/Public?sortOrder=Desc&limit=100"
+	function ListServers(cursor)
+		local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+		return Http:JSONDecode(Raw)
+	end
+
+	local Next; repeat
+		local Servers = ListServers(Next)
+		for i,v in next, Servers.data do
+			if v.playing < v.maxPlayers and v.id ~= _id then
+				local s,r = pcall(TPS.TeleportToPlaceInstance,TPS,_place,v.id,Player)
+				if s then break end
+			end
+		end
+		Next = Servers.nextPageCursor
+	until not Next
+end
+
+
+AF2:Ti("Player Settings")
+
+
+
+local WalkSpeedMinimum = 25
+local WalkSpeedMaximum = 500
+local WalkSpeed = 13
+AF2:Slider(
+	"Walk Speed",
+	WalkSpeedMinimum,
+	WalkSpeedMaximum,
+	WalkSpeed,
+	function(a)
+		getgenv().Settings["Misc"]["WalkSpeed"] = a
+	end
+)
+
+AF2:Toggle(
+	"Infinite Jump",
+	getgenv().Settings["Misc"]["Infinite Jump"],
+	function(a)
+		getgenv().Settings["Misc"]["Infinite Jump"] = a
+		game:GetService("UserInputService").JumpRequest:connect(function()
+			if getgenv().Settings["Misc"]["Infinite Jump"] then
+				game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+			end
+		end)
+	end
+)
+
+AF2:Toggle(
+	"Water Mark",
+	getgenv().Settings["Misc"]["WaterMark"],
+	function(a)
+		getgenv().Settings["Misc"]["WaterMark"] = a
+	end
+)
+
+AF2:Ti("Credits")
+AF2:Button(
+	"Scripter : qxxpc",
+	function()
+
+	end
+)
+AF2:Button(
+	"Discord Server",
+	function()
+		local req = (syn and syn.request) or (http and http.request) or http_request or nil
+		if req ~= nil then
+			for port = 6463, 6472, 1 do
+				local inv = 'http://127.0.0.1:' .. tostring(port) .. '/rpc?v=1'
+				local http = game:GetService('HttpService')
+				local t = {
+					cmd = 'INVITE_BROWSER',
+					args = {
+						['code'] = 'ShRxg3keMF'
+					},
+					nonce = string.lower(http:GenerateGUID(false))
+				}
+				local post = http:JSONEncode(t)
+				req({
+					Url = inv,
+					Method = 'POST',
+					Body = post,
+					Headers = {
+						['Content-Type'] = 'application/json',
+						['Origin'] = 'https://discord.com'
+					}
+				})
+			end
+		end
+	end
+)
+
+AF2:Ti("Misc")
+AF2:Button(
+	"Low Graphic Quality",
+	function()
+		local decalsyeeted = true
+		local g = game
+		local w = g.Workspace
+		local l = g.Lighting
+		local t = w.Terrain
+		t.WaterWaveSize = 0
+		t.WaterWaveSpeed = 0
+		t.WaterReflectance = 0
+		t.WaterTransparency = 0
+		l.GlobalShadows = false
+		l.FogEnd = 9e9
+		l.Brightness = 0
+		settings().Rendering.QualityLevel = "Level01"
+		for i, v in pairs(g:GetDescendants()) do
+			if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+				v.Material = "Plastic"
+				v.Reflectance = 0
+			elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+				v.Transparency = 1
+			elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+				v.Lifetime = NumberRange.new(0)
+			elseif v:IsA("Explosion") then
+				v.BlastPressure = 1
+				v.BlastRadius = 1
+			elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+				v.Enabled = false
+			elseif v:IsA("MeshPart") then
+				v.Material = "Plastic"
+				v.Reflectance = 0
+				v.TextureID = 10385902758728957
+			end
+		end	
+	end
+)
+
+
+
+AF2:Button(
+	"Rejoin",
+	function()
+		game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+	end
+)
+
+AF2:Button(
+	"Server Hop",
+	function()
+		ServerHop()
+	end
+)
+
+
+
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+--// Auto Farm
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+task.spawn(function()
+	while wait(1) do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Mob Farm"] then
+				wait(1)
+                fireproximityprompt(workspace.Mobs["1"][getgenv().Settings["Auto Farm"]["Mob Select"]].Table.Attachment.ProximityPrompt)
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	while wait(1) do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Boss Farm"] then
+				wait(1)
+                fireproximityprompt(workspace.Bosses[getgenv().Settings["Auto Farm"]["Boss Select"]].Table.Attachment.ProximityPrompt)
+			end
+		end)
+	end
+end)
+
+
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Halloween Sword"] then
+				fireproximityprompt(workspace.Mobs["1"]["-5"].Table.Attachment.ProximityPrompt)
+			end
+		end)
+	end
+end)
+
+
+function HalloweenEvent()
+	for i,v in pairs(workspace.EventMobs:GetChildren()) do
+		if v:IsA("Model") and v.HumanoidRootPart:FindFirstChild("BillboardGui") then
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v["Head"].CFrame
+		end
+	end
+end
+
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Halloween Mob"] then
+				HalloweenEvent()
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Auto Click"] then
+				game:GetService("VirtualUser"):ClickButton1(Vector2.new(5000,5000))
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Auto Hatch Alien Egg"] then
+				game:GetService("ReplicatedStorage").GameClient.Events.RemoteEvent.SpaceEggEvent:FireServer()
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Auto Hatch Magma Egg"] then
+				game:GetService("ReplicatedStorage").GameClient.Events.RemoteEvent.EventEggEvent:FireServer()
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	while wait(2) do
+		pcall(function()
+
+			if getgenv().Settings["Auto Farm"]["Auto Equip Best"] then
+				wait(2)
+				game:GetService("ReplicatedStorage"):WaitForChild("GameClient"):WaitForChild("Events"):WaitForChild("RemoteFunction"):WaitForChild("HandlePet"):InvokeServer( "EquipBest",{})
+			end
+		end)
+	end
+end)
+
+
+local Gift = {
+	"Reward1",
+	"Reward2",
+	"Reward3",
+	"Reward4",
+	"Reward5",
+	"Reward6",
+	"Reward7",
+	"Reward8",
+	"Reward9",
+	"Reward10",
+	"Reward11",
+	"Reward12"
+}
+
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Claim Gift"] then
+				for r,GiftList in pairs(Gift) do
+					pcall(function()
+						game:GetService("ReplicatedStorage"):WaitForChild("GameClient"):WaitForChild("Events"):WaitForChild("RemoteEvent"):WaitForChild("ClaimGift"):FireServer(GiftList)
+					end)
+				end
+			end
+		end)
+	end
+end)
+
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+--// Misc
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
+-- Walk Speed 
+
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			game:GetService("Players").LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().Settings["Misc"]["WalkSpeed"]
+		end)
+	end
+end)
+
+
+
+--WaterMark
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Misc"]["WaterMark"] then
+				game:GetService("CoreGui")["Qx Hub"].WaterMark.Visible = true
+			else
+				game:GetService("CoreGui")["Qx Hub"].WaterMark.Visible = false
+			end
+		end)
+	end
+end)
+
+
+
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
+spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Mob Farm"] or getgenv().Settings["Auto Farm"]["Boss Farm"] or getgenv().Settings["Auto Farm"]["Halloween Mob"] or getgenv().Settings["Auto Farm"]["Halloween Sword"] then
+				game:GetService("VirtualUser"):ClickButton1(Vector2.new(5000,5000))
+			end
+		end)
+	end
+end)
+
+
+spawn(function()
+	game:GetService("RunService").Stepped:Connect(function()
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Halloween Mob"] then
+				if syn then
+					setfflag("HumanoidParallelRemoveNoPhysics", "False")
+					setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
+					game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+					if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
+						game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
+					end
+				else
+					if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+						if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1") then
+							if game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit == true then
+								game.Players.LocalPlayer.Character:WaitForChild("Humanoid").Sit = false
+							end
+							local BodyVelocity = Instance.new("BodyVelocity")
+							BodyVelocity.Name = "BodyVelocity1"
+							BodyVelocity.Parent =  game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+							BodyVelocity.MaxForce = Vector3.new(10000, 10000, 10000)
+							BodyVelocity.Velocity = Vector3.new(0, 0, 0)
+						end
+					end
+					for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+						if v:IsA("BasePart") then
+							v.CanCollide = false    
+						end
+					end
+				end
+			else
+				if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1") then
+					game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity1"):Destroy();
+				end
+			end
+		end)
+	end)
+end)
