@@ -260,7 +260,6 @@ AF2:Button(
 )
 
 
-
 AF2:Button(
 	"Rejoin",
 	function()
