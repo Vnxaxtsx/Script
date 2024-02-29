@@ -9,6 +9,17 @@ repeat wait() until game:GetService("Players")
 repeat wait() until game:GetService("Players").LocalPlayer
 repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui
 
+function comma(amount)
+	local formatted = amount
+	while true do  
+		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+		if (k==0) then
+			break
+		end
+	end
+	return formatted
+end
+
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vnxaxtsx/Library/main/QxLibrary"))()
 
 
