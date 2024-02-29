@@ -138,6 +138,8 @@ AF1:Toggle(
 	end
 )
 
+getgenv().ChapterValue = 1
+getgenv().StageValue = 1
 task.spawn(function()
 	while wait() do
 		pcall(function()
