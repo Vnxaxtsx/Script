@@ -41,41 +41,41 @@ local AF2 = TAutoFarm:addpage()
 
 
 function GetAllFood()
-    for i, v in pairs(game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]].Collectibles:GetChildren()) do
-        if v.Name == "Cookie" then
-            for i,child in pairs(v:GetChildren()) do
-                if child.ClassName == "Part" and child.Parent == v then
-                    for i,abc in pairs(child:GetChildren()) do
-                        if abc.Name == "Cookie" and abc.Parent == child then
-                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        end
-                    end
-                end
-            end
-        end
-        if v.Name == "Noodles" then
-            for i,child in pairs(v:GetChildren()) do
-                if child.ClassName == "Part" and child.Parent == v then
-                    for i,abc in pairs(child:GetChildren()) do
-                        if abc.Name == "Noodles" and abc.Parent == child then
-                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        end
-                    end
-                end
-            end
-        end
-        if v.Name == "SesamePie" then
-            for i,child in pairs(v:GetChildren()) do
-                if child.ClassName == "Part" and child.Parent == v then
-                    for i,abc in pairs(child:GetChildren()) do
-                        if abc.Name == "SesamePie" and abc.Parent == child then
-                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        end
-                    end
-                end
-            end
-        end
-    end
+	for i, v in pairs(game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]].Collectibles:GetChildren()) do
+		if v.Name == "Cookie" then
+			for i,child in pairs(v:GetChildren()) do
+				if child.ClassName == "Part" and child.Parent == v then
+					for i,abc in pairs(child:GetChildren()) do
+						if abc.Name == "Cookie" and abc.Parent == child then
+							abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+						end
+					end
+				end
+			end
+		end
+		if v.Name == "Noodles" then
+			for i,child in pairs(v:GetChildren()) do
+				if child.ClassName == "Part" and child.Parent == v then
+					for i,abc in pairs(child:GetChildren()) do
+						if abc.Name == "Noodles" and abc.Parent == child then
+							abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+						end
+					end
+				end
+			end
+		end
+		if v.Name == "SesamePie" then
+			for i,child in pairs(v:GetChildren()) do
+				if child.ClassName == "Part" and child.Parent == v then
+					for i,abc in pairs(child:GetChildren()) do
+						if abc.Name == "SesamePie" and abc.Parent == child then
+							abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+						end
+					end
+				end
+			end
+		end
+	end
 end
 
 ------------------------------------------------------------------------------------------------
@@ -138,23 +138,21 @@ AF1:Toggle(
 	end
 )
 
-getgenv().ChapterValue 
-getgenv().StageValue 
 task.spawn(function()
 	while wait() do
 		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter1" then
-                getgenv().ChapterValue = 1
-            elseif getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter2" then
-                getgenv().ChapterValue = 2
+				getgenv().ChapterValue = 1
+			elseif getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter2" then
+				getgenv().ChapterValue = 2
 			end
 
-            if getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage1" then
-                getgenv().StageValue = 1
-            elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stages2" then
-                getgenv().StageValue = 2
-            elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage3" then
-                getgenv().StageValue = 3
+			if getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage1" then
+				getgenv().StageValue = 1
+			elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stages2" then
+				getgenv().StageValue = 2
+			elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage3" then
+				getgenv().StageValue = 3
 			end
 		end)
 	end
@@ -165,13 +163,13 @@ task.spawn(function()
 	while wait(1) do
 		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Auto Stages"] then
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(ChapterValue, StageValue)
-                repeat wait()
-                until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
-                wait()
-                GetAllFood()
-                wait()
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(getgenv().ChapterValue, getgenv().StageValue)
+				repeat wait()
+				until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
+				wait()
+				GetAllFood()
+				wait()
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
 	end
@@ -191,13 +189,13 @@ task.spawn(function()
 	while wait(1) do
 		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Get All Food"] then
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(ChapterValue, StageValue)
-                repeat wait()
-                until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
-                wait()
-                GetAllFood()
-                wait()
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
+				game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(getgenv().ChapterValue, getgenv().StageValue)
+				repeat wait()
+				until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
+				wait()
+				GetAllFood()
+				wait()
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
 	end
