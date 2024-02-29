@@ -1,3 +1,18 @@
+getgenv().Settings = {
+	["Auto Farm"] = {
+		["Select Chapter"] = "Chapter1", --{Chapter1, Chapter2}
+		["Select Stages"] = "Stage1", --{Stage1, Stage2, Stage3}
+		["Auto Stages"] = false,
+		["Get All Food"] = false
+	},
+	["Misc"] = {
+		["Font"] = Enum.Font.Fantasy,
+		["Color"] = Color3.fromRGB(173, 48, 48),
+		["WaterMark"] = true
+	}
+}
+
+
 game:GetService("Players").LocalPlayer.Idled:connect(function()
 	game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 	wait(1)
@@ -138,10 +153,36 @@ AF1:Toggle(
 	end
 )
 
+local ChapterValue 
+local StageValue 
 task.spawn(function()
 	while wait() do
 		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter1" then
+                ChapterValue =1
+            elseif getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter2" then
+                ChapterValue = 2
+			end
+
+            if getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage1" then
+                StageValue = 1
+            elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stages2" then
+                StageValue = 2
+            elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage3" then
+                StageValue = 3
+			end
+		end)
+	end
+end)
+
+task.spawn(function()
+	while wait(1) do
+		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Auto Stages"] then
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(ChapterValue, StageValue)
+                repeat wait()
+                until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
+                wait()
                 GetAllFood()
                 if game:GetService("Players").LocalPlayer.PlayerGui.ObbyGui.ObbyActivePane.TopContainer.TopBar.ObbyTimerPane.TimerLabel.Seconds.DigitsLabel.Text >= 32 then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
@@ -162,11 +203,15 @@ AF1:Toggle(
 )
 
 task.spawn(function()
-	while wait() do
+	while wait(1) do
 		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Get All Food"] then
-                GetAllFood()
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(ChapterValue, StageValue)
+                repeat wait()
+                until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
                 wait()
+                GetAllFood()
+                wait(1)
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
