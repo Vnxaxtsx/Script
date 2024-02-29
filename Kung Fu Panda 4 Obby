@@ -195,7 +195,7 @@ task.spawn(function()
 				until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
 				wait()
 				GetAllFood()
-				wait()
+				wait(3)
 				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
