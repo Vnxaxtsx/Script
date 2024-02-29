@@ -138,27 +138,28 @@ AF1:Toggle(
 	end
 )
 
-local ChapterValue 
-local StageValue 
+_G.ChapterValue 
+_G.StageValue 
 task.spawn(function()
 	while wait() do
 		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter1" then
-                ChapterValue =1
+                _G.ChapterValue = 1
             elseif getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter2" then
-                ChapterValue = 2
+                _G.ChapterValue = 2
 			end
 
             if getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage1" then
-                StageValue = 1
+                _G.StageValue = 1
             elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stages2" then
-                StageValue = 2
+                _G.StageValue = 2
             elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage3" then
-                StageValue = 3
+                _G.StageValue = 3
 			end
 		end)
 	end
 end)
+
 
 task.spawn(function()
 	while wait(1) do
