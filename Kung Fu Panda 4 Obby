@@ -22,6 +22,10 @@ end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vnxaxtsx/Library/main/QxLibrary"))()
 
+
+
+--[Functions Join Discord]
+
 game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
 	if child.Name == 'ErrorPrompt' and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
 		game:GetService("TeleportService"):Teleport(game.PlaceId)
@@ -36,7 +40,43 @@ local AF1 = TAutoFarm:addpage()
 local AF2 = TAutoFarm:addpage()
 
 
-
+function GetAllFood()
+    for i, v in pairs(game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]].Collectibles:GetChildren()) do
+        if v.Name == "Cookie" then
+            for i,child in pairs(v:GetChildren()) do
+                if child.ClassName == "Part" and child.Parent == v then
+                    for i,abc in pairs(child:GetChildren()) do
+                        if abc.Name == "Cookie" and abc.Parent == child then
+                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                        end
+                    end
+                end
+            end
+        end
+        if v.Name == "Noodles" then
+            for i,child in pairs(v:GetChildren()) do
+                if child.ClassName == "Part" and child.Parent == v then
+                    for i,abc in pairs(child:GetChildren()) do
+                        if abc.Name == "Noodles" and abc.Parent == child then
+                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                        end
+                    end
+                end
+            end
+        end
+        if v.Name == "SesamePie" then
+            for i,child in pairs(v:GetChildren()) do
+                if child.ClassName == "Part" and child.Parent == v then
+                    for i,abc in pairs(child:GetChildren()) do
+                        if abc.Name == "SesamePie" and abc.Parent == child then
+                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
 ------------------------------------------------------------------------------------------------
 ---------------------------------------// Chapter //--------------------------------------------
@@ -87,45 +127,6 @@ AF1:DropDown(
 	end
 )
 
-
-function GetAllFood()
-    for i, v in pairs(game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]].Collectibles:GetChildren()) do
-        if v.Name == "Cookie" then
-            for i,child in pairs(v:GetChildren()) do
-                if child.ClassName == "Part" and child.Parent == v then
-                    for i,abc in pairs(child:GetChildren()) do
-                        if abc.Name == "Cookie" and abc.Parent == child then
-                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        end
-                    end
-                end
-            end
-        end
-        if v.Name == "Noodles" then
-            for i,child in pairs(v:GetChildren()) do
-                if child.ClassName == "Part" and child.Parent == v then
-                    for i,abc in pairs(child:GetChildren()) do
-                        if abc.Name == "Noodles" and abc.Parent == child then
-                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        end
-                    end
-                end
-            end
-        end
-        if v.Name == "SesamePie" then
-            for i,child in pairs(v:GetChildren()) do
-                if child.ClassName == "Part" and child.Parent == v then
-                    for i,abc in pairs(child:GetChildren()) do
-                        if abc.Name == "SesamePie" and abc.Parent == child then
-                            abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
 ------------------------------------------------------------------------------------------------
 -------------------------------------// Auto Stages //------------------------------------------
 ------------------------------------------------------------------------------------------------
@@ -166,8 +167,9 @@ task.spawn(function()
                 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(ChapterValue, StageValue)
                 repeat wait()
                 until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
+                wait()
                 GetAllFood()
-                wait(30)
+                wait()
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
@@ -193,7 +195,7 @@ task.spawn(function()
                 until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
                 wait()
                 GetAllFood()
-                wait(1)
+                wait()
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
