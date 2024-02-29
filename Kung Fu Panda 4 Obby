@@ -167,11 +167,9 @@ task.spawn(function()
                 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(ChapterValue, StageValue)
                 repeat wait()
                 until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
-                wait()
                 GetAllFood()
-                if game:GetService("Players").LocalPlayer.PlayerGui.ObbyGui.ObbyActivePane.TopContainer.TopBar.ObbyTimerPane.TimerLabel.Seconds.DigitsLabel.Text >= 32 then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
-                end
+                wait(30)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
 	end
