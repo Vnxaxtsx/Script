@@ -1,3 +1,17 @@
+getgenv().Settings = {
+	["Auto Farm"] = {
+		["Select Chapter"] = "Chapter1", --{Chapter1, Chapter2}
+		["Select Stages"] = "Stage1", --{Stage1, Stage2, Stage3}
+		["Auto Stages"] = false,
+		["Get All Food"] = false
+	},
+	["Misc"] = {
+		["Font"] = Enum.Font.Fantasy,
+		["Color"] = Color3.fromRGB(173, 48, 48),
+		["WaterMark"] = true
+	}
+}
+
 game:GetService("Players").LocalPlayer.Idled:connect(function()
 	game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 	wait(1)
@@ -160,7 +174,6 @@ task.spawn(function()
 	end
 end)
 
-
 task.spawn(function()
 	while wait(1) do
 		pcall(function()
@@ -170,7 +183,7 @@ task.spawn(function()
 				until game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End")
 				wait()
 				GetAllFood()
-				wait()
+				wait(30)
 				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[getgenv().Settings["Auto Farm"]["Select Chapter"]].Stages[getgenv().Settings["Auto Farm"]["Select Stages"]]:FindFirstChild("End").CFrame
 			end
 		end)
@@ -202,6 +215,8 @@ task.spawn(function()
 		end)
 	end
 end)
+
+
 ------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------
 
