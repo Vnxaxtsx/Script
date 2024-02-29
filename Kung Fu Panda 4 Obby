@@ -9,17 +9,6 @@ repeat wait() until game:GetService("Players")
 repeat wait() until game:GetService("Players").LocalPlayer
 repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui
 
-function comma(amount)
-	local formatted = amount
-	while true do  
-		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-		if (k==0) then
-			break
-		end
-	end
-	return formatted
-end
-
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vnxaxtsx/Library/main/QxLibrary"))()
 
 
@@ -138,23 +127,23 @@ AF1:Toggle(
 	end
 )
 
-_G.ChapterValue 
-_G.StageValue 
+getgenv().ChapterValue 
+getgenv().StageValue 
 task.spawn(function()
 	while wait() do
 		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter1" then
-                _G.ChapterValue = 1
+                getgenv().ChapterValue = 1
             elseif getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter2" then
-                _G.ChapterValue = 2
+                getgenv().ChapterValue = 2
 			end
 
             if getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage1" then
-                _G.StageValue = 1
+                getgenv().StageValue = 1
             elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stages2" then
-                _G.StageValue = 2
+                getgenv().StageValue = 2
             elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage3" then
-                _G.StageValue = 3
+                getgenv().StageValue = 3
 			end
 		end)
 	end
