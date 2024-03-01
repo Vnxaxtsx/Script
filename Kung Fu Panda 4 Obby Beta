@@ -91,12 +91,17 @@ function GetAllFood(Chapter, Stage)
 	end
 end
 function TeleportToEnd(Chapter, Stage)
+	repeat wait()
+		GetAllFood(Chapter, Stage)
+	until game:GetService("Workspace").Obby[Chapter].Stages[Stage]:FindFirstChild("End")
+	wait()
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[Chapter].Stages[Stage]:FindFirstChild("End").CFrame
 end
 
 function StartEvent(Chapter, Stage)
 	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(getgenv().ChapterValue, getgenv().StageValue)
 	repeat wait()
+		GetAllFood(Chapter, Stage)
 	until game:GetService("Workspace").Obby[Chapter].Stages[Stage]:FindFirstChild("End")
 end
 ------------------------------------------------------------------------------------------------
@@ -187,13 +192,11 @@ task.spawn(function()
 		pcall(function()
 			if getgenv().Settings["Auto Farm"]["Start Farm"] then
 				if getgenv().Settings["Auto Farm"]["Select Mode"] == "Farm Food" then
-					StartEvent(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
-					GetAllFood(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+					StartEvent("Chapter1", "Stage1")
 					wait(3)
-					TeleportToEnd(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+					TeleportToEnd("Chapter1", "Stage1")
 				elseif getgenv().Settings["Auto Farm"]["Select Mode"] == "Auto Stages" then
 					StartEvent(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
-					GetAllFood(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
 					wait(30)
 					TeleportToEnd(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
 				end
