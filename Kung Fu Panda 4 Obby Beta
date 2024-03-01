@@ -1,0 +1,258 @@
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+	game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+	wait(1)
+	game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+
+repeat wait() until game:IsLoaded()
+repeat wait() until game:GetService("Players")
+repeat wait() until game:GetService("Players").LocalPlayer
+repeat wait() until game:GetService("Players").LocalPlayer.PlayerGui
+
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vnxaxtsx/Library/main/QxLibrary"))()
+
+
+
+--[Functions Join Discord]
+
+game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
+	if child.Name == 'ErrorPrompt' and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
+		game:GetService("TeleportService"):Teleport(game.PlaceId)
+	end
+end)
+
+
+local window = library:Win()
+local TAutoFarm = window:addtap("Auto Farm")
+
+local AF1 = TAutoFarm:addpage()
+local AF2 = TAutoFarm:addpage()
+
+
+function GetAllFood(Chapter, Stage)
+	for i, v in pairs(game:GetService("Workspace").Obby[Chapter].Stages[Stage].Collectibles:GetChildren()) do
+		if v.Name == "Cookie" then
+			for i,child in pairs(v:GetChildren()) do
+				if child.ClassName == "Part" and child.Parent == v then
+					for i,abc in pairs(child:GetChildren()) do
+						if abc.Name == "Cookie" and abc.Parent == child then
+							abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+						end
+					end
+				end
+			end
+		end
+		if v.Name == "Noodles" then
+			for i,child in pairs(v:GetChildren()) do
+				if child.ClassName == "Part" and child.Parent == v then
+					for i,abc in pairs(child:GetChildren()) do
+						if abc.Name == "Noodles" and abc.Parent == child then
+							abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+						end
+					end
+				end
+			end
+		end
+		if v.Name == "SesamePie" then
+			for i,child in pairs(v:GetChildren()) do
+				if child.ClassName == "Part" and child.Parent == v then
+					for i,abc in pairs(child:GetChildren()) do
+						if abc.Name == "SesamePie" and abc.Parent == child then
+							abc.Part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+						end
+					end
+				end
+			end
+		end
+	end
+end
+function TeleportToEnd(Chapter, Stage)
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Obby[Chapter].Stages[Stage]:FindFirstChild("End").CFrame
+end
+
+function StartEvent(Chapter, Stage)
+	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(string.match(Chapter, "%d+"), string.match(Stage, "%d+"))
+	repeat wait()
+	until game:GetService("Workspace").Obby[Chapter].Stages[Stage]:FindFirstChild("End")
+end
+------------------------------------------------------------------------------------------------
+---------------------------------------// Chapter //--------------------------------------------
+------------------------------------------------------------------------------------------------
+
+AF1:Ti("Kung Fu Panda")
+
+local ChapterTable = {
+	"Chapter1",
+	"Chapter2"
+}
+
+local ChapterTableValue 
+if getgenv().Settings["Auto Farm"]["Select Chapter"] == "" then
+	ChapterTableValue = "Select Chapter"
+else
+	ChapterTableValue = getgenv().Settings["Auto Farm"]["Select Chapter"]
+end
+AF1:DropDown(
+	ChapterTableValue,
+	ChapterTable,
+	function(a)
+		getgenv().Settings["Auto Farm"]["Select Chapter"]  = a
+	end
+)
+
+------------------------------------------------------------------------------------------------
+----------------------------------------// Stages //--------------------------------------------
+------------------------------------------------------------------------------------------------
+
+local StageTable = {
+	"Stage1",
+	"Stage2",
+	"Stage3"
+}
+
+local StageTableValue 
+if getgenv().Settings["Auto Farm"]["Select Stages"] == "" then
+	StageTableValue = "Select Stages"
+else
+	StageTableValue = getgenv().Settings["Auto Farm"]["Select Stages"]
+end
+AF1:DropDown(
+	StageTableValue,
+	StageTable,
+	function(a)
+		getgenv().Settings["Auto Farm"]["Select Stages"]  = a
+	end
+)
+
+------------------------------------------------------------------------------------------------
+-------------------------------------// Select  Mode //-----------------------------------------
+------------------------------------------------------------------------------------------------
+
+local ModeTable = {
+	"Farm Food",
+	"Auto Stages"
+}
+
+local ModeTableValue 
+if getgenv().Settings["Auto Farm"]["Select Mode"] == "" then
+	ModeTableValue = "Select Mode"
+else
+	ModeTableValue = getgenv().Settings["Auto Farm"]["Select Mode"]
+end
+AF1:DropDown(
+	ModeTableValue,
+	ModeTable,
+	function(a)
+		getgenv().Settings["Auto Farm"]["Select Mode"]  = a
+	end
+)
+
+------------------------------------------------------------------------------------------------
+--------------------------------------// Auto Farm //-------------------------------------------
+------------------------------------------------------------------------------------------------
+
+AF1:Toggle(
+	"Start Farm",
+	getgenv().Settings["Auto Farm"]["Start Farm"],
+	function(a)
+		getgenv().Settings["Auto Farm"]["Start Farm"] = a
+	end
+)
+task.spawn(function()
+	while wait(1) do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Start Farm"] then
+				if getgenv().Settings["Auto Farm"]["Select Mode"] == "Farm Food" then
+					StartEvent(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+					GetAllFood(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+					wait(3)
+					TeleportToEnd(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+				elseif getgenv().Settings["Auto Farm"]["Select Mode"] == "Auto Stages" then
+					StartEvent(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+					GetAllFood(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+					wait(30)
+					TeleportToEnd(getgenv().Settings["Auto Farm"]["Select Chapter"], getgenv().Settings["Auto Farm"]["Select Stages"])
+				end
+			end
+		end)
+	end
+end)
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+AF2:Ti("Credits")
+AF2:Button(
+	"Scripter : nb_np",
+	function()
+
+	end
+)
+AF2:Ti("Misc")
+AF2:Toggle(
+	"Water Mark",
+	getgenv().Settings["Misc"]["WaterMark"],
+	function(a)
+		getgenv().Settings["Misc"]["WaterMark"] = a
+	end
+)
+
+AF2:Button(
+	"Low Graphic Quality",
+	function()
+		local decalsyeeted = true
+		local g = game
+		local w = g.Workspace
+		local l = g.Lighting
+		local t = w.Terrain
+		t.WaterWaveSize = 0
+		t.WaterWaveSpeed = 0
+		t.WaterReflectance = 0
+		t.WaterTransparency = 0
+		l.GlobalShadows = false
+		l.FogEnd = 9e9
+		l.Brightness = 0
+		settings().Rendering.QualityLevel = "Level01"
+		for i, v in pairs(g:GetDescendants()) do
+			if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+				v.Material = "Plastic"
+				v.Reflectance = 0
+			elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+				v.Transparency = 1
+			elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+				v.Lifetime = NumberRange.new(0)
+			elseif v:IsA("Explosion") then
+				v.BlastPressure = 1
+				v.BlastRadius = 1
+			elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+				v.Enabled = false
+			elseif v:IsA("MeshPart") then
+				v.Material = "Plastic"
+				v.Reflectance = 0
+				v.TextureID = 10385902758728957
+			end
+		end	
+	end
+)
+
+
+AF2:Button(
+	"Rejoin",
+	function()
+		game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+	end
+)
+--WaterMark
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Misc"]["WaterMark"] then
+				game:GetService("CoreGui")["Qx Hub"].WaterMark.Visible = true
+			else
+				game:GetService("CoreGui")["Qx Hub"].WaterMark.Visible = false
+			end
+		end)
+	end
+end)
+
