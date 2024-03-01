@@ -30,6 +30,29 @@ local AF1 = TAutoFarm:addpage()
 local AF2 = TAutoFarm:addpage()
 
 
+getgenv().ChapterValue = 1
+getgenv().StageValue = 1
+task.spawn(function()
+	while wait() do
+		pcall(function()
+			if getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter1" then
+				getgenv().ChapterValue = 1
+			elseif getgenv().Settings["Auto Farm"]["Select Chapter"] == "Chapter2" then
+				getgenv().ChapterValue = 2
+			end
+
+			if getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage1" then
+				getgenv().StageValue = 1
+			elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stages2" then
+				getgenv().StageValue = 2
+			elseif getgenv().Settings["Auto Farm"]["Select Stages"] == "Stage3" then
+				getgenv().StageValue = 3
+			end
+		end)
+	end
+end)
+
+
 function GetAllFood(Chapter, Stage)
 	for i, v in pairs(game:GetService("Workspace").Obby[Chapter].Stages[Stage].Collectibles:GetChildren()) do
 		if v.Name == "Cookie" then
@@ -72,7 +95,7 @@ function TeleportToEnd(Chapter, Stage)
 end
 
 function StartEvent(Chapter, Stage)
-	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(string.match(Chapter, "%d+"), string.match(Stage, "%d+"))
+	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("RequestStartObbyFunction"):InvokeServer(getgenv().ChapterValue, getgenv().StageValue)
 	repeat wait()
 	until game:GetService("Workspace").Obby[Chapter].Stages[Stage]:FindFirstChild("End")
 end
